@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { User } from "@supabase/supabase-js";
 import { Navigate } from "react-router-dom";
@@ -60,7 +59,7 @@ const Admin = () => {
       <ContentProtection>
         <div className="min-h-screen bg-background">
           <Navigation />
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-4 pt-24 pb-8">
             <Alert className="max-w-md mx-auto">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>

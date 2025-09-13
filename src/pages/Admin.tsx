@@ -12,6 +12,7 @@ import { BlogManagement } from "@/components/admin/BlogManagement";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SubscriberManagement } from "@/components/admin/SubscriberManagement";
 import { ReportManagement } from "@/components/admin/ReportManagement";
+import { HomepageManagement } from "@/components/admin/HomepageManagement";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
@@ -95,6 +96,7 @@ const Admin = () => {
               <TabsTrigger value="blog">Blog</TabsTrigger>
               <TabsTrigger value="reports">Reports</TabsTrigger>
               <TabsTrigger value="subscribers">Subscribers</TabsTrigger>
+              <TabsTrigger value="homepage">Homepage</TabsTrigger>
             </TabsList>
 
             <TabsContent value="users">
@@ -123,6 +125,10 @@ const Admin = () => {
 
             <TabsContent value="subscribers">
               <SubscriberManagement />
+            </TabsContent>
+
+            <TabsContent value="homepage">
+              <HomepageManagement />
             </TabsContent>
           </Tabs>
         </div>

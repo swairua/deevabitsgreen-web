@@ -17,12 +17,20 @@ export const Navigation = () => {
   useEffect(() => {
     if (user) {
       const fetchUserRole = async () => {
-        const { data } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('user_id', user.id)
-          .single();
-        setUserRole(data?.role || 'user');
+        try {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('user_id', user.id)
+            .single();
+          if (error) {
+            console.warn('Failed to fetch user role', error);
+          }
+          setUserRole(data?.role || 'user');
+        } catch (err) {
+          console.warn('Error fetching user role', err);
+          setUserRole('user');
+        }
       };
       fetchUserRole();
     } else {

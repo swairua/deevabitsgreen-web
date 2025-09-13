@@ -1,4 +1,3 @@
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Shield, Award, Users, Clock } from "lucide-react";
 
@@ -16,13 +15,16 @@ const certifications = [
   { icon: Clock, title: "8+ Years", description: "Proven track record in solar" }
 ];
 
+import { useHomepageContent } from "@/hooks/useHomepageContent";
+
 export const TrustIndicators = () => {
+  const { content } = useHomepageContent();
   return (
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         {/* Partner Logos */}
         <div className="text-center mb-16">
-          <h3 className="text-2xl font-bold mb-8">Trusted by Leading Organizations</h3>
+          <h3 className="text-2xl font-bold mb-8">{content.trustIndicators.title}</h3>
           <div className="flex flex-wrap justify-center items-center gap-8 opacity-70">
             {partners.map((partner, index) => (
               <div key={index} className="flex items-center justify-center p-4 bg-white rounded-lg shadow-sm">
@@ -51,9 +53,9 @@ export const TrustIndicators = () => {
 
         {/* Financing Partners */}
         <div className="text-center mt-16">
-          <h3 className="text-xl font-semibold mb-4">Flexible Financing Available</h3>
+          <h3 className="text-xl font-semibold mb-4">{content.trustIndicators.financingTitle}</h3>
           <p className="text-muted-foreground mb-6">
-            Partner with leading banks for affordable solar financing options
+            {content.trustIndicators.financingDescription}
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             <span className="bg-solar-blue/10 text-solar-blue px-4 py-2 rounded-full">KCB Bank Partnership</span>

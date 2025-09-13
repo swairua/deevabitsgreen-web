@@ -13,6 +13,33 @@ export type HomepageContent = {
     co2SavedTonnes: number;
     mwInstalled: number;
   };
+  featuredProducts: {
+    title: string;
+    subtitle: string;
+  };
+  solarPackages: {
+    title: string;
+    subtitle: string;
+  };
+  whyChooseUs: {
+    title: string;
+    subtitle: string;
+  };
+  trustIndicators: {
+    title: string;
+    financingTitle: string;
+    financingDescription: string;
+  };
+  whatsappCta: {
+    title: string;
+    description: string;
+    primaryButton: string;
+    secondaryButton: string;
+  };
+  newsletter: {
+    title: string;
+    description: string;
+  };
 };
 
 const defaultContent: HomepageContent = {
@@ -26,6 +53,33 @@ const defaultContent: HomepageContent = {
     jobsCreated: 127,
     co2SavedTonnes: 2400,
     mwInstalled: 45,
+  },
+  featuredProducts: {
+    title: "Featured Solar Equipment",
+    subtitle: "Premium quality solar components from trusted global brands. Everything you need for a complete solar system.",
+  },
+  solarPackages: {
+    title: "Solar Packages & Solutions",
+    subtitle: "Complete solar systems designed for different needs and budgets. Choose the perfect package or let us customize one specifically for you.",
+  },
+  whyChooseUs: {
+    title: "Why Choose Deevabits?",
+    subtitle: "We combine technical expertise with social impact, delivering reliable solar solutions that benefit both your pocket and the planet.",
+  },
+  trustIndicators: {
+    title: "Trusted by Leading Organizations",
+    financingTitle: "Flexible Financing Available",
+    financingDescription: "Partner with leading banks for affordable solar financing options",
+  },
+  whatsappCta: {
+    title: "Need Instant Help?",
+    description: "Get expert advice, quick quotes, and technical support through WhatsApp. Our solar specialists are ready to help you go solar today!",
+    primaryButton: "Chat on WhatsApp",
+    secondaryButton: "Call Us Now",
+  },
+  newsletter: {
+    title: "Stay Powered with Updates",
+    description: "Get the latest solar tips, product updates, financing options, and exclusive offers delivered to your inbox.",
   },
 };
 

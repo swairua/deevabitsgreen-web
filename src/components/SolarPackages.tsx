@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Check, MessageCircle, Zap, Star } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { supabase } from "@/integrations/supabase/client";
+import { useHomepageContent } from "@/hooks/useHomepageContent";
 
 interface SolarPackage {
   id: string;
@@ -93,6 +94,7 @@ const fallbackPackages = [
 
 export const SolarPackages = () => {
   const [packages, setPackages] = useState<SolarPackage[]>([]);
+  const { content } = useHomepageContent();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -144,11 +146,10 @@ export const SolarPackages = () => {
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Zap className="h-8 w-8 text-primary" />
-            <h2 className="text-4xl font-bold">Solar Packages & Solutions</h2>
+            <h2 className="text-4xl font-bold">{content.solarPackages.title}</h2>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Complete solar systems designed for different needs and budgets. 
-            Choose the perfect package or let us customize one specifically for you.
+            {content.solarPackages.subtitle}
           </p>
         </div>
 

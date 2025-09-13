@@ -1,10 +1,11 @@
-
 import { Button } from "@/components/ui/button";
 import { products } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";
 import { Link } from "react-router-dom";
+import { useHomepageContent } from "@/hooks/useHomepageContent";
 
 export const FeaturedProducts = () => {
+  const { content } = useHomepageContent();
   // Show first 4 products as featured
   const featuredProducts = products.slice(0, 4);
 
@@ -12,10 +13,9 @@ export const FeaturedProducts = () => {
     <section id="shop" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Featured Solar Equipment</h2>
+          <h2 className="text-4xl font-bold mb-4">{content.featuredProducts.title}</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Premium quality solar components from trusted global brands. 
-            Everything you need for a complete solar system.
+            {content.featuredProducts.subtitle}
           </p>
         </div>
 

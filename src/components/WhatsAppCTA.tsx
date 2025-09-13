@@ -1,9 +1,10 @@
-
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Phone } from "lucide-react";
 import { siteConfig } from "@/config/site";
+import { useHomepageContent } from "@/hooks/useHomepageContent";
 
 export const WhatsAppCTA = () => {
+  const { content } = useHomepageContent();
   const handleWhatsApp = () => {
     const message = "Hi! I need instant help with solar solutions. Can you assist me?";
     const url = `https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(message)}`;
@@ -18,10 +19,9 @@ export const WhatsAppCTA = () => {
     <section className="py-16 solar-gradient-blue text-white">
       <div className="container mx-auto px-4 text-center">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl font-bold mb-4">Need Instant Help?</h2>
+          <h2 className="text-4xl font-bold mb-4">{content.whatsappCta.title}</h2>
           <p className="text-xl mb-8 opacity-90">
-            Get expert advice, quick quotes, and technical support through WhatsApp. 
-            Our solar specialists are ready to help you go solar today!
+            {content.whatsappCta.description}
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -31,7 +31,7 @@ export const WhatsAppCTA = () => {
               onClick={handleWhatsApp}
             >
               <MessageCircle className="mr-2 h-5 w-5" />
-              Chat on WhatsApp
+              {content.whatsappCta.primaryButton}
             </Button>
             
             <Button 
@@ -41,7 +41,7 @@ export const WhatsAppCTA = () => {
               onClick={handleCall}
             >
               <Phone className="mr-2 h-5 w-5" />
-              Call Us Now
+              {content.whatsappCta.secondaryButton}
             </Button>
           </div>
 

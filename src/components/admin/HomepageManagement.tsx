@@ -118,6 +118,108 @@ export const HomepageManagement = () => {
           </div>
         </div>
 
+        {/* Section: Featured Products */}
+        <div className="grid gap-4">
+          <h3 className="text-lg font-semibold">Featured Products</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <Label>Title</Label>
+              <Input value={content.featuredProducts.title} onChange={(e) => handleChange(["featuredProducts", "title"], e.target.value)} />
+            </div>
+            <div>
+              <Label>Subtitle</Label>
+              <Input value={content.featuredProducts.subtitle} onChange={(e) => handleChange(["featuredProducts", "subtitle"], e.target.value)} />
+            </div>
+          </div>
+        </div>
+
+        {/* Section: Solar Packages */}
+        <div className="grid gap-4">
+          <h3 className="text-lg font-semibold">Solar Packages</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <Label>Title</Label>
+              <Input value={content.solarPackages.title} onChange={(e) => handleChange(["solarPackages", "title"], e.target.value)} />
+            </div>
+            <div>
+              <Label>Subtitle</Label>
+              <Input value={content.solarPackages.subtitle} onChange={(e) => handleChange(["solarPackages", "subtitle"], e.target.value)} />
+            </div>
+          </div>
+        </div>
+
+        {/* Section: Why Choose Us */}
+        <div className="grid gap-4">
+          <h3 className="text-lg font-semibold">Why Choose Us</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <Label>Title</Label>
+              <Input value={content.whyChooseUs.title} onChange={(e) => handleChange(["whyChooseUs", "title"], e.target.value)} />
+            </div>
+            <div>
+              <Label>Subtitle</Label>
+              <Input value={content.whyChooseUs.subtitle} onChange={(e) => handleChange(["whyChooseUs", "subtitle"], e.target.value)} />
+            </div>
+          </div>
+        </div>
+
+        {/* Section: Trust Indicators */}
+        <div className="grid gap-4">
+          <h3 className="text-lg font-semibold">Trust Indicators</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <Label>Main Title</Label>
+              <Input value={content.trustIndicators.title} onChange={(e) => handleChange(["trustIndicators", "title"], e.target.value)} />
+            </div>
+            <div>
+              <Label>Financing Title</Label>
+              <Input value={content.trustIndicators.financingTitle} onChange={(e) => handleChange(["trustIndicators", "financingTitle"], e.target.value)} />
+            </div>
+            <div className="md:col-span-2">
+              <Label>Financing Description</Label>
+              <Input value={content.trustIndicators.financingDescription} onChange={(e) => handleChange(["trustIndicators", "financingDescription"], e.target.value)} />
+            </div>
+          </div>
+        </div>
+
+        {/* Section: WhatsApp CTA */}
+        <div className="grid gap-4">
+          <h3 className="text-lg font-semibold">WhatsApp CTA</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <Label>Title</Label>
+              <Input value={content.whatsappCta.title} onChange={(e) => handleChange(["whatsappCta", "title"], e.target.value)} />
+            </div>
+            <div>
+              <Label>Description</Label>
+              <Input value={content.whatsappCta.description} onChange={(e) => handleChange(["whatsappCta", "description"], e.target.value)} />
+            </div>
+            <div>
+              <Label>Primary Button</Label>
+              <Input value={content.whatsappCta.primaryButton} onChange={(e) => handleChange(["whatsappCta", "primaryButton"], e.target.value)} />
+            </div>
+            <div>
+              <Label>Secondary Button</Label>
+              <Input value={content.whatsappCta.secondaryButton} onChange={(e) => handleChange(["whatsappCta", "secondaryButton"], e.target.value)} />
+            </div>
+          </div>
+        </div>
+
+        {/* Section: Newsletter */}
+        <div className="grid gap-4">
+          <h3 className="text-lg font-semibold">Newsletter</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <Label>Title</Label>
+              <Input value={content.newsletter.title} onChange={(e) => handleChange(["newsletter", "title"], e.target.value)} />
+            </div>
+            <div>
+              <Label>Description</Label>
+              <Input value={content.newsletter.description} onChange={(e) => handleChange(["newsletter", "description"], e.target.value)} />
+            </div>
+          </div>
+        </div>
+
         <div className="flex gap-3">
           <Button onClick={save} disabled={saving}>{saving ? "Saving..." : "Save"}</Button>
         </div>

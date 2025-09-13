@@ -398,6 +398,24 @@ export type Database = {
         }
         Relationships: []
       }
+      homepage_content: {
+        Row: {
+          id: string
+          data: Json | null
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          data?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          data?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

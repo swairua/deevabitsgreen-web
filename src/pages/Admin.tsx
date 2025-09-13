@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { User } from "@supabase/supabase-js";
 import { Navigate } from "react-router-dom";
@@ -13,6 +12,7 @@ import { BlogManagement } from "@/components/admin/BlogManagement";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SubscriberManagement } from "@/components/admin/SubscriberManagement";
 import { ReportManagement } from "@/components/admin/ReportManagement";
+import { HomepageManagement } from "@/components/admin/HomepageManagement";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
@@ -23,24 +23,31 @@ const Admin = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        setUser(user);
 
-      if (user) {
-        const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('user_id', user.id)
-          .single();
+        if (user) {
+          const { data: profile, error } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('user_id', user.id)
+            .single();
 
-        if (error) {
-          console.error("Error fetching profile:", error);
-          setIsAdmin(false);
-        } else {
-          setIsAdmin(profile?.role === 'admin' || profile?.role === 'super_admin' || profile?.role === 'editor');
+          if (error) {
+            console.warn("Error fetching profile:", error);
+            setIsAdmin(false);
+          } else {
+            setIsAdmin(profile?.role === 'admin' || profile?.role === 'super_admin' || profile?.role === 'editor');
+          }
         }
+      } catch (err) {
+        console.warn("Supabase getUser failed", err);
+        setUser(null);
+        setIsAdmin(false);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchUser();
@@ -60,7 +67,7 @@ const Admin = () => {
       <ContentProtection>
         <div className="min-h-screen bg-background">
           <Navigation />
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-4 pt-24 pb-8">
             <Alert className="max-w-md mx-auto">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
@@ -89,6 +96,7 @@ const Admin = () => {
               <TabsTrigger value="blog">Blog</TabsTrigger>
               <TabsTrigger value="reports">Reports</TabsTrigger>
               <TabsTrigger value="subscribers">Subscribers</TabsTrigger>
+              <TabsTrigger value="homepage">Homepage</TabsTrigger>
             </TabsList>
 
             <TabsContent value="users">
@@ -117,6 +125,10 @@ const Admin = () => {
 
             <TabsContent value="subscribers">
               <SubscriberManagement />
+            </TabsContent>
+
+            <TabsContent value="homepage">
+              <HomepageManagement />
             </TabsContent>
           </Tabs>
         </div>

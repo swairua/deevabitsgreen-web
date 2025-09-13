@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { MessageCircle, ShoppingCart, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useHomepageContent } from "@/hooks/useHomepageContent";
 import { siteConfig } from "@/config/site";
 import heroImage1 from "@/assets/hero-home.jpg";
 import heroImage2 from "@/assets/hero-solar-empowerment.jpg";
@@ -9,7 +10,10 @@ import heroImage3 from "@/assets/hero-impact.jpg";
 
 export const Hero = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const images = [heroImage1, heroImage2, heroImage3];
+  const { content } = useHomepageContent();
+  const images = (content.hero.images && content.hero.images.length > 0)
+    ? content.hero.images
+    : [heroImage1, heroImage2, heroImage3] as unknown as string[];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -62,8 +66,8 @@ export const Hero = () => {
       <div className="relative z-10 text-center text-white px-4 max-w-6xl mx-auto">
         <div className="animate-fade-in-up">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Powering Homes,
-            <span className="block text-brand-yellow">Empowering Lives</span>
+            {content.hero.title}
+            <span className="block text-brand-yellow">{content.hero.subtitle}</span>
           </h1>
           
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">

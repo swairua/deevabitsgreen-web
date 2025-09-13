@@ -1,41 +1,18 @@
-
 import { useEffect, useState } from "react";
+import { useHomepageContent } from "@/hooks/useHomepageContent";
 import { Card } from "@/components/ui/card";
 import { Home, Users, Leaf, Zap } from "lucide-react";
 
-const stats = [
-  {
-    icon: Home,
-    value: 5247,
-    label: "Households Powered",
-    suffix: "+",
-    color: "text-solar-blue"
-  },
-  {
-    icon: Users,
-    value: 127,
-    label: "Jobs Created",
-    suffix: "+",
-    color: "text-solar-green"
-  },
-  {
-    icon: Leaf,
-    value: 2400,
-    label: "Tonnes CO₂ Saved",
-    suffix: "+",
-    color: "text-solar-green"
-  },
-  {
-    icon: Zap,
-    value: 45,
-    label: "MW Installed",
-    suffix: "+",
-    color: "text-primary"
-  }
-];
+const defaultStats = [
+  { icon: Home, key: "householdsPowered", label: "Households Powered", suffix: "+", color: "text-solar-blue" },
+  { icon: Users, key: "jobsCreated", label: "Jobs Created", suffix: "+", color: "text-solar-green" },
+  { icon: Leaf, key: "co2SavedTonnes", label: "Tonnes CO₂ Saved", suffix: "+", color: "text-solar-green" },
+  { icon: Zap, key: "mwInstalled", label: "MW Installed", suffix: "+", color: "text-primary" },
+] as const;
 
 export const ImpactStats = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const { content } = useHomepageContent();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -65,15 +42,15 @@ export const ImpactStats = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {stats.map((stat, index) => (
+          {defaultStats.map((stat, index) => (
             <Card key={index} className="p-8 text-center hover:shadow-lg transition-shadow">
               <div className="flex justify-center mb-4">
                 <stat.icon className={`h-12 w-12 ${stat.color}`} />
               </div>
               <div className={`text-4xl font-bold mb-2 ${isVisible ? 'animate-counter' : ''}`}>
-                <CountUp 
-                  end={stat.value} 
-                  duration={2} 
+                <CountUp
+                  end={(content.impact as any)[stat.key] as number}
+                  duration={2}
                   suffix={stat.suffix}
                   isVisible={isVisible}
                 />

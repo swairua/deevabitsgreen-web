@@ -22,24 +22,31 @@ const Admin = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        setUser(user);
 
-      if (user) {
-        const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('user_id', user.id)
-          .single();
+        if (user) {
+          const { data: profile, error } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('user_id', user.id)
+            .single();
 
-        if (error) {
-          console.error("Error fetching profile:", error);
-          setIsAdmin(false);
-        } else {
-          setIsAdmin(profile?.role === 'admin' || profile?.role === 'super_admin' || profile?.role === 'editor');
+          if (error) {
+            console.warn("Error fetching profile:", error);
+            setIsAdmin(false);
+          } else {
+            setIsAdmin(profile?.role === 'admin' || profile?.role === 'super_admin' || profile?.role === 'editor');
+          }
         }
+      } catch (err) {
+        console.warn("Supabase getUser failed", err);
+        setUser(null);
+        setIsAdmin(false);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchUser();

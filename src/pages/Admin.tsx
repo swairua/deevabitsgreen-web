@@ -67,7 +67,7 @@ const Admin = () => {
       <ContentProtection>
         <div className="min-h-screen bg-background">
           <Navigation />
-          <div className="container mx-auto px-4 pt-24 pb-8">
+          <div className="container mx-auto px-4 pt-32 pb-8">
             <Alert className="max-w-md mx-auto">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
@@ -84,7 +84,7 @@ const Admin = () => {
     <ContentProtection>
       <div className="min-h-screen bg-background">
         <Navigation />
-        <div className="container mx-auto px-4 pt-24 pb-8">
+        <div className="container mx-auto px-4 pt-32 pb-8">
           <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
           
           <Tabs defaultValue="users" className="space-y-6">

@@ -16,6 +16,8 @@ export type HomepageContent = {
   featuredProducts: {
     title: string;
     subtitle: string;
+    // Selected featured product IDs (from Supabase products table or legacy IDs)
+    ids?: string[];
   };
   solarPackages: {
     title: string;
@@ -57,6 +59,7 @@ const defaultContent: HomepageContent = {
   featuredProducts: {
     title: "Featured Solar Equipment",
     subtitle: "Premium quality solar components from trusted global brands. Everything you need for a complete solar system.",
+    ids: [],
   },
   solarPackages: {
     title: "Solar Packages & Solutions",

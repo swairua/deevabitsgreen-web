@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useHomepageContent, type HomepageContent } from "@/hooks/useHomepageContent";
@@ -13,6 +14,8 @@ export const HomepageManagement = () => {
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [allProducts, setAllProducts] = useState<Array<{ id: string; name: string; category: string; is_active?: boolean }>>([]);
+  const [productsLoading, setProductsLoading] = useState(false);
 
   const handleChange = (path: (keyof HomepageContent)[] | string, value: any) => {
     setContent((prev) => {
@@ -33,6 +36,43 @@ export const HomepageManagement = () => {
       const images = [...(prev.hero.images || [])];
       images[index] = value;
       return { ...prev, hero: { ...prev.hero, images } };
+    });
+  };
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setProductsLoading(true);
+        const { data, error } = await supabase
+          .from('products')
+          .select('id,name,category,is_active')
+          .order('created_at', { ascending: false });
+        if (error) throw error;
+        setAllProducts((data || []).filter(p => p.is_active !== false));
+      } catch (e) {
+        console.warn('Could not load products for featured selection', e);
+        setAllProducts([]);
+      } finally {
+        setProductsLoading(false);
+      }
+    };
+    loadProducts();
+  }, []);
+
+  const toggleFeatured = (productId: string, checked: boolean) => {
+    setContent(prev => {
+      const current = prev.featuredProducts.ids || [];
+      let next = [...current];
+      if (checked) {
+        if (current.length >= 4 && !current.includes(productId)) {
+          toast({ title: 'Limit reached', description: 'You can select up to 4 featured products.', variant: 'destructive' });
+          return prev;
+        }
+        if (!next.includes(productId)) next.push(productId);
+      } else {
+        next = next.filter(id => id !== productId);
+      }
+      return { ...prev, featuredProducts: { ...prev.featuredProducts, ids: next } };
     });
   };
 
@@ -130,6 +170,31 @@ export const HomepageManagement = () => {
               <Label>Subtitle</Label>
               <Input value={content.featuredProducts.subtitle} onChange={(e) => handleChange(["featuredProducts", "subtitle"], e.target.value)} />
             </div>
+          </div>
+
+          <div className="mt-2">
+            <Label>Select up to 4 products</Label>
+            <div className="text-sm text-muted-foreground mb-2">Selected: {(content.featuredProducts.ids || []).length} / 4</div>
+            {productsLoading ? (
+              <div className="text-sm text-muted-foreground">Loading products…</div>
+            ) : allProducts.length === 0 ? (
+              <div className="text-sm text-muted-foreground">No products found. Create products first in the Products section.</div>
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {allProducts.map(p => {
+                  const checked = (content.featuredProducts.ids || []).includes(p.id);
+                  return (
+                    <label key={p.id} className="flex items-center gap-3 p-3 rounded-md border">
+                      <Checkbox checked={checked} onCheckedChange={(val) => toggleFeatured(p.id, Boolean(val))} />
+                      <div>
+                        <div className="font-medium leading-none">{p.name}</div>
+                        <div className="text-xs text-muted-foreground">{p.category.replace('_',' ')}</div>
+                      </div>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
 

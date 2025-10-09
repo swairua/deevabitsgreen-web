@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { products as legacyProducts } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";

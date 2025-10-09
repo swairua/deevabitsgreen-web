@@ -13,24 +13,49 @@ export const FeaturedProducts = () => {
   useEffect(() => {
     const run = async () => {
       const ids = content.featuredProducts.ids || [];
+      // If admin selected some, try DB first
       if (ids.length > 0) {
         try {
-          const { data, error } = await supabase
+          const { data: selected, error } = await supabase
             .from('products')
             .select('*')
             .in('id', ids)
             .eq('is_active', true);
           if (error) throw error;
-          const map = new Map((data || []).map(p => [p.id, p]));
-          const ordered = ids.map(id => map.get(id)).filter(Boolean).slice(0, 4) as any[];
-          if (ordered.length > 0) {
-            setItems(ordered);
-            return;
+          const map = new Map((selected || []).map(p => [p.id, p]));
+          let ordered: any[] = ids.map(id => map.get(id)).filter(Boolean) as any[];
+
+          // If less than 4, fill with other active products
+          if (ordered.length < 4) {
+            const { data: more, error: moreErr } = await supabase
+              .from('products')
+              .select('*')
+              .eq('is_active', true)
+              .order('created_at', { ascending: false })
+              .limit(10);
+            if (!moreErr && more) {
+              for (const p of more) {
+                if (ordered.length >= 4) break;
+                if (!ids.includes(p.id)) ordered.push(p);
+              }
+            }
           }
+
+          // Final fallback to legacy to ensure 4
+          if (ordered.length < 4) {
+            for (const lp of legacyProducts) {
+              if (ordered.length >= 4) break;
+              if (!ordered.find((p: any) => p.id === lp.id)) ordered.push(lp);
+            }
+          }
+
+          setItems(ordered.slice(0, 4));
+          return;
         } catch (e) {
           console.warn('Failed to load featured products from DB, falling back', e);
         }
       }
+      // No selection: use legacy defaults
       setItems(legacyProducts.slice(0, 4));
     };
     run();

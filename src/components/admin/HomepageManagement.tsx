@@ -80,20 +80,30 @@ export const HomepageManagement = () => {
     try {
       setSaving(true);
       setError(null);
+      // Minimal payload to avoid schema mismatches (e.g., if updated_at column doesn't exist)
       const payload = {
         id: "default",
         data: content,
-        updated_at: new Date().toISOString(),
-      };
+      } as const;
+
       const { error } = await (supabase as any)
         .from("homepage_content")
         .upsert(payload, { onConflict: "id" });
+
       if (error) throw error;
       toast({ title: "Homepage content saved" });
     } catch (err: any) {
-      console.error("Save homepage content failed", err);
-      setError("Failed to save. Ensure 'homepage_content' table exists with columns: id text PK, data jsonb, updated_at timestamp.");
-      toast({ title: "Save failed", description: "Backend table missing?", variant: "destructive" });
+      // Fallback to localStorage so Admin can still save without DB
+      try {
+        localStorage.setItem("homepage_content", JSON.stringify(content));
+        toast({ title: "Saved locally", description: "Could not reach database; changes saved in your browser.", });
+        setError(null);
+      } catch (lsErr) {
+        const message = err?.message || String(err);
+        console.error("Save homepage content failed", err);
+        setError(`Failed to save. Error: ${message}. Ensure table 'homepage_content' exists with columns: id text PK, data jsonb.`);
+        toast({ title: "Save failed", description: message, variant: "destructive" });
+      }
     } finally {
       setSaving(false);
     }

@@ -97,7 +97,8 @@ export function useHomepageContent() {
       try {
         setLoading(true);
         setError(null);
-        // Using any to avoid type coupling if backend table isn't present yet
+
+        // Try Supabase first
         const { data, error } = await (supabase as any)
           .from("homepage_content")
           .select("data")
@@ -106,10 +107,22 @@ export function useHomepageContent() {
         if (error) throw error;
         if (data?.data && isMounted) {
           setContent({ ...defaultContent, ...data.data });
+          return;
         }
       } catch (err: any) {
         console.warn("Homepage content load failed", err?.message || err);
         if (isMounted) setError("Content not found; using defaults");
+      }
+
+      // Fallback: load from localStorage if present
+      try {
+        const raw = localStorage.getItem("homepage_content");
+        if (raw && isMounted) {
+          const parsed = JSON.parse(raw);
+          setContent({ ...defaultContent, ...parsed });
+        }
+      } catch {
+        /* ignore */
       } finally {
         if (isMounted) setLoading(false);
       }

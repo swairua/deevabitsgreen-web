@@ -1,13 +1,39 @@
 import { Button } from "@/components/ui/button";
-import { products } from "@/data/products";
+import { products as legacyProducts } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";
 import { Link } from "react-router-dom";
 import { useHomepageContent } from "@/hooks/useHomepageContent";
+import { supabase } from "@/integrations/supabase/client";
 
 export const FeaturedProducts = () => {
   const { content } = useHomepageContent();
-  // Show first 4 products as featured
-  const featuredProducts = products.slice(0, 4);
+  const [items, setItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    const run = async () => {
+      const ids = content.featuredProducts.ids || [];
+      if (ids.length > 0) {
+        try {
+          const { data, error } = await supabase
+            .from('products')
+            .select('*')
+            .in('id', ids)
+            .eq('is_active', true);
+          if (error) throw error;
+          const map = new Map((data || []).map(p => [p.id, p]));
+          const ordered = ids.map(id => map.get(id)).filter(Boolean).slice(0, 4) as any[];
+          if (ordered.length > 0) {
+            setItems(ordered);
+            return;
+          }
+        } catch (e) {
+          console.warn('Failed to load featured products from DB, falling back', e);
+        }
+      }
+      setItems(legacyProducts.slice(0, 4));
+    };
+    run();
+  }, [content.featuredProducts.ids]);
 
   return (
     <section id="shop" className="py-20 bg-background">
@@ -20,7 +46,7 @@ export const FeaturedProducts = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {featuredProducts.map((product) => (
+          {items.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
